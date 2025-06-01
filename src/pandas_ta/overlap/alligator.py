@@ -3,9 +3,14 @@ from pandas import DataFrame, Series
 from pandas_ta._typing import DictLike, Int
 from pandas_ta.utils import v_offset, v_pos_default, v_series, v_talib
 from .smma import smma
-from posix import pread
+import os
+import sys
 
-
+if sys.platform == "win32":
+    def pread(file_path, offset, size):
+        return pread_windows(file_path, offset, size)
+else:
+    from posix import pread
 
 def alligator(
     close: Series, jaw: Int = None, teeth: Int = None, lips: Int = None,
